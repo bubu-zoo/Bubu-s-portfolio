@@ -1,409 +1,394 @@
+// === Portfolio Data ===
+
+const jokes = [
+    "I told my password it had to be eight characters long. It said, “No problem — I’ll be SnowWhite&7Dwarfs.”",
+    "Why did the hacker break up with their partner? Too many trust issues and no secure connection.",
+    "Cybersecurity is like parenting: You spend all day yelling, “Don’t click that!”",
+    "I asked IT if my password was strong enough. They said, “No, but your emotional attachment to it is.”",
+    "Why don’t hackers like nature? Too many firewalls in the forest.",
+    "A cybersecurity expert’s favorite pickup line: Are you a phishing email? Because I’m strangely drawn to suspicious links.",
+    "I renamed my Wi-Fi to “FBI Surveillance Van.” Now nobody in the neighborhood connects to it.",
+    "Why do programmers prefer dark mode? Because light attracts bugs.",
+    "There are 10 types of people in the world: those who understand binary, and those who don't.",
+    "I'd tell you a UDP joke, but you might not get it.",
+    "A SQL query goes into a bar, walks up to two tables and asks... 'Can I join you?'",
+    "How many programmers does it take to change a light bulb? None, that's a hardware problem.",
+    "Why did the functional programmer get thrown out of school? Because he refused to take classes.",
+    "Debugging: Being the detective in a crime movie where you are also the murderer.",
+    "An IPv6 packet walks into a bar. Nobody talks to him.",
+    "My boss said we needed better endpoint protection. So I put little helmets on all the laptops.",
+    "Two-factor authentication is great. Now I can forget two things instead of one.",
+    "I got locked out after too many password attempts. Apparently “password123” was also everyone else’s strategy."
+];
+
+const experienceData = [
+    {
+        date: "April 2025 - April 2026",
+        role: "Security Research Intern",
+        company: "COE CNDS Labs, VJTI",
+        desc: "Conducted VAPT on IoT devices, physical hardware, routers, firewalls, and enterprise network environments. Worked on firmware extraction, service enumeration, and OT security assessments."
+    },
+    {
+        date: "March - June, 2024",
+        role: "Internship - VAPT",
+        company: "Cyber Secured India",
+        desc: "Performed Vulnerability Assessment & Penetration Testing for web applications, including reconnaissance, vulnerability analysis, and attack-surface assessments. Contributed to OSINT research."
+    }
+];
+
+const skillsData = [
+    {
+        category: "Offensive Security & VAPT",
+        icon: "fa-shield-halved",
+        skills: [
+            { name: "Penetration Testing", level: 95 },
+            { name: "Active Directory Exploitation", level: 80 },
+            { name: "IoT & Hardware Hacking", level: 75 },
+            { name: "Red Team Operations", level: 80 }
+        ]
+    },
+    {
+        category: "Systems & Networks",
+        icon: "fa-network-wired",
+        skills: [
+            { name: "Linux Administration", level: 90 },
+            { name: "Network Security & Firewalls", level: 80 },
+            { name: "OT/ICS Security", level: 70 },
+            { name: "System Configuration", level: 85 }
+        ]
+    },
+    {
+        category: "Development & Tools",
+        icon: "fa-code",
+        skills: [
+            { name: "Web Application Programming", level: 85 },
+            { name: "Python / Bash Scripting", level: 80 },
+            { name: "Burp Suite, Metasploit, Nmap", level: 95 },
+            { name: "Threat Intelligence", level: 85 }
+        ]
+    }
+];
+
+const projectsData = [
+    {
+        title: "FortiChain: Physical EDR",
+        desc: "AI-assisted physical security incident response framework inspired by Endpoint Detection & Response (EDR) systems adhering to zero-trust architecture.",
+        image: "images/project-fortichain.png",
+        fallbackImg: "images/fortichain.jpg",
+        tech: ["Python", "AI Agents", "Zero-Trust", "EDR"],
+        link: "#"
+    },
+    {
+        title: "Red Team Home Lab",
+        desc: "Self-hosted Active Directory and virtualized cybersecurity home lab for practicing Red Team operations, privilege escalation, and lateral movement.",
+        image: "images/project-homelab.png",
+        fallbackImg: "images/project-homelab.png",
+        tech: ["Active Directory", "Windows/Linux", "Firewalls", "Virtualization"],
+        link: "#"
+    },
+    {
+        title: "HackerZone CTF",
+        desc: "Beginner-focused CTF platform featuring practical challenges covering web exploitation, recon, cryptography, and penetration testing concepts.",
+        image: "images/project-ctf.png",
+        fallbackImg: "images/ctf-playground.jpg",
+        tech: ["Web Development", "Cryptography", "Reverse Engineering", "Linux"],
+        link: "https://hackerzone-ctfplatform.onrender.com/"
+    }
+];
+
+const blogsData = [
+    {
+        date: "Oct 15, 2025",
+        title: "Bypassing Modern EDR Systems",
+        preview: "An in-depth look at how memory injection and syscall unhooking can be used to silently bypass modern enterprise EDR solutions...",
+        link: "#"
+    },
+    {
+        date: "Aug 22, 2025",
+        title: "IoT Firmware Extraction Techniques",
+        preview: "Exploring hardware hacking methodologies to dump and analyze firmware from embedded devices using UART and SPI interfaces...",
+        link: "#"
+    },
+    {
+        date: "Jun 10, 2025",
+        title: "Active Directory: Kerberoasting 101",
+        preview: "A practical guide to understanding and executing Kerberoasting attacks within a misconfigured Active Directory environment...",
+        link: "#"
+    }
+];
+
+// === DOM Manipulation & Logic ===
+
 document.addEventListener('DOMContentLoaded', () => {
-    const body = document.body;
+    
+    // 1. Theme Toggle
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const htmlElement = document.documentElement;
+    const themeIcon = themeToggleBtn.querySelector('i');
 
-    // --- Preloader ---
-    const preloader = document.querySelector('.preloader');
-    const loaderBar = document.querySelector('.loader-bar');
-    const loaderText = document.querySelector('.loader-text');
-
-    if (preloader && loaderBar && loaderText) {
-        body.style.overflow = 'hidden';
-        let progress = 0;
-        const texts = ["Initializing...", "Scanning Your IP...", "Avoiding Firewall...", "Unsecuring Channels...", "System Online."];
-        let textIndex = 0;
-        loaderText.textContent = texts[textIndex];
-
-        const interval = setInterval(() => {
-            progress += Math.random() * 20 + 10;
-            if (progress >= 100) {
-                progress = 100; clearInterval(interval);
-                loaderText.textContent = texts[texts.length - 1];
-                gsap.to(loaderBar, { width: '100%', duration: 0.3, onComplete: hidePreloader });
-            } else {
-                gsap.to(loaderBar, { width: `${progress}%`, duration: 0.4, ease: "power1.out" });
-                if (progress > (textIndex + 1) * 25 && textIndex < texts.length - 2) {
-                    textIndex++; loaderText.textContent = texts[textIndex];
-                }
-            }
-        }, 300);
-
-        function hidePreloader() {
-            gsap.to(preloader, {
-                opacity: 0, duration: 0.6, ease: "power2.inOut",
-                onComplete: () => {
-                    if (preloader) preloader.style.display = 'none';
-                    body.style.overflow = '';
-                    initPageInteractions();
-                }
-            });
+    themeToggleBtn.addEventListener('click', () => {
+        if (htmlElement.getAttribute('data-theme') === 'dark') {
+            htmlElement.setAttribute('data-theme', 'light');
+            themeIcon.classList.replace('fa-moon', 'fa-sun');
+        } else {
+            htmlElement.setAttribute('data-theme', 'dark');
+            themeIcon.classList.replace('fa-sun', 'fa-moon');
         }
-    } else {
-        console.warn("Preloader elements not found.");
-        body.style.overflow = '';
-        initPageInteractions();
+    });
+
+    // 2. Mobile Menu Toggle
+    const mobileBtn = document.querySelector('.mobile-menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+
+    mobileBtn.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        const icon = mobileBtn.querySelector('i');
+        if (navLinks.classList.contains('active')) {
+            icon.classList.replace('fa-bars', 'fa-times');
+        } else {
+            icon.classList.replace('fa-times', 'fa-bars');
+        }
+    });
+
+    // Close mobile menu on link click
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            navLinks.classList.remove('active');
+            mobileBtn.querySelector('i').classList.replace('fa-times', 'fa-bars');
+        });
+    });
+
+    // 3. Dynamic Joke Rotator
+    const jokeText = document.getElementById('joke-text');
+    let jokeIndex = 0;
+
+    function changeJoke() {
+        jokeText.style.opacity = 0;
+        setTimeout(() => {
+            jokeText.textContent = jokes[jokeIndex];
+            jokeText.style.opacity = 1;
+            jokeIndex = (jokeIndex + 1) % jokes.length;
+        }, 500); // Wait for fade out
+    }
+    
+    jokeText.style.transition = "opacity 0.5s ease";
+    changeJoke(); // Initial call
+    setInterval(changeJoke, 10000); // Every 10 seconds
+
+    // 4. Typewriter Effect
+    const roles = ["Cybersecurity Engineer.", "Red Team Analyst.", "VAPT Specialist.", "Threat Hunter."];
+    let roleIdx = 0;
+    let charIdx = 0;
+    let isDeleting = false;
+    const typeWriterElement = document.getElementById('typewriter');
+
+    function typeEffect() {
+        const currentRole = roles[roleIdx];
+        
+        if (isDeleting) {
+            typeWriterElement.textContent = currentRole.substring(0, charIdx - 1);
+            charIdx--;
+        } else {
+            typeWriterElement.textContent = currentRole.substring(0, charIdx + 1);
+            charIdx++;
+        }
+
+        let typeSpeed = isDeleting ? 50 : 100;
+
+        if (!isDeleting && charIdx === currentRole.length) {
+            typeSpeed = 2000; // Pause at end
+            isDeleting = true;
+        } else if (isDeleting && charIdx === 0) {
+            isDeleting = false;
+            roleIdx = (roleIdx + 1) % roles.length;
+            typeSpeed = 500; // Pause before typing next
+        }
+
+        setTimeout(typeEffect, typeSpeed);
+    }
+    
+    setTimeout(typeEffect, 1000); // Start after 1s
+
+    // 5. Populate Data dynamically
+    
+    // Experience
+    const expContainer = document.getElementById('experience-container');
+    experienceData.forEach(exp => {
+        expContainer.innerHTML += `
+            <div class="experience-item slide-up">
+                <span class="exp-date">${exp.date}</span>
+                <h4 class="exp-role">${exp.role}</h4>
+                <div class="exp-company">${exp.company}</div>
+                <p class="exp-desc">${exp.desc}</p>
+            </div>
+        `;
+    });
+
+    // Skills
+    const skillsContainer = document.getElementById('skills-container');
+    skillsData.forEach(cat => {
+        let skillsHTML = '';
+        cat.skills.forEach(skill => {
+            skillsHTML += `
+                <div class="skill-item">
+                    <div class="skill-info">
+                        <span>${skill.name}</span>
+                        <span class="skill-percent" data-val="${skill.level}">0%</span>
+                    </div>
+                    <div class="skill-bar-bg">
+                        <div class="skill-bar-fill" data-width="${skill.level}%" style="width: 0;"></div>
+                    </div>
+                </div>
+            `;
+        });
+
+        skillsContainer.innerHTML += `
+            <div class="skill-category glass slide-up">
+                <h3 class="skill-cat-title"><i class="fas ${cat.icon}"></i> ${cat.category}</h3>
+                <div class="skill-list">
+                    ${skillsHTML}
+                </div>
+            </div>
+        `;
+    });
+
+    // Projects
+    const projectsContainer = document.getElementById('projects-container');
+    projectsData.forEach(proj => {
+        let techHTML = proj.tech.map(t => `<span class="tech-tag">${t}</span>`).join('');
+        
+        projectsContainer.innerHTML += `
+            <div class="project-card glass slide-up">
+                <div class="project-img-container">
+                    <img src="${proj.image}" onerror="this.src='${proj.fallbackImg}'" alt="${proj.title}" class="project-img">
+                    <div class="project-overlay">
+                        <a href="${proj.link}" class="icon-btn" aria-label="View Code"><i class="fab fa-github"></i></a>
+                        <a href="${proj.link}" class="icon-btn" aria-label="Live Demo"><i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">${proj.title}</h3>
+                    <p class="project-desc">${proj.desc}</p>
+                    <div class="project-tech">
+                        ${techHTML}
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+
+    // Blogs
+    const blogsContainer = document.getElementById('blogs-container');
+    blogsData.forEach(blog => {
+        blogsContainer.innerHTML += `
+            <div class="blog-card glass slide-up">
+                <span class="blog-date"><i class="far fa-calendar-alt"></i> ${blog.date}</span>
+                <h3 class="blog-title">${blog.title}</h3>
+                <p class="blog-preview">${blog.preview}</p>
+                <a href="${blog.link}" class="read-more">Read Log <i class="fas fa-arrow-right"></i></a>
+            </div>
+        `;
+    });
+
+    // 6. Scroll Animations & Intersection Observer
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px"
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                
+                // If it's a skill bar, animate the width
+                if (entry.target.classList.contains('skill-category')) {
+                    const fills = entry.target.querySelectorAll('.skill-bar-fill');
+                    fills.forEach(fill => {
+                        fill.style.width = fill.getAttribute('data-width');
+                    });
+                    
+                    // Animate percentage numbers
+                    const percents = entry.target.querySelectorAll('.skill-percent');
+                    percents.forEach(percent => {
+                        const target = parseInt(percent.getAttribute('data-val'));
+                        animateValue(percent, 0, target, 1500);
+                    });
+                }
+
+                // If it's stats section, animate numbers
+                if (entry.target.classList.contains('about-stats')) {
+                    const stats = entry.target.querySelectorAll('.stat-num');
+                    stats.forEach(stat => {
+                        const target = parseInt(stat.getAttribute('data-val'));
+                        animateValue(stat, 0, target, 2000);
+                    });
+                }
+                
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.slide-up, .slide-in-right, .about-stats').forEach(el => {
+        observer.observe(el);
+    });
+
+    // Helper for number animation
+    function animateValue(obj, start, end, duration) {
+        let startTimestamp = null;
+        const step = (timestamp) => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+            obj.innerHTML = Math.floor(progress * (end - start) + start) + (obj.classList.contains('skill-percent') ? '%' : (end > 50 ? '+' : ''));
+            if (progress < 1) {
+                window.requestAnimationFrame(step);
+            }
+        };
+        window.requestAnimationFrame(step);
     }
 
-    function initPageInteractions() {
-        // --- Real-time Custom Cursor ---
-        const customCursor = document.querySelector('.custom-cursor');
-        if (customCursor && window.matchMedia('(pointer: fine)').matches) {
-            window.addEventListener('mousemove', (e) => {
-                gsap.set(customCursor, { x: e.clientX, y: e.clientY });
-            });
-            const interactiveElements = document.querySelectorAll('a, button, input, textarea, .project-card, .skill-card, .blog-post-card, .logo');
-            interactiveElements.forEach(el => {
-                el.addEventListener('mouseenter', () => {
-                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') { customCursor.classList.add('text-input-hover'); }
-                    else { customCursor.classList.add('pointer-hover'); }
-                });
-                el.addEventListener('mouseleave', () => { customCursor.classList.remove('pointer-hover'); customCursor.classList.remove('text-input-hover'); });
-            });
-            document.addEventListener('mousedown', () => customCursor.classList.add('clicking'));
-            document.addEventListener('mouseup', () => customCursor.classList.remove('clicking'));
-        } else if (customCursor) { customCursor.style.display = 'none'; }
+    // 7. Active Nav Link on Scroll
+    const sections = document.querySelectorAll('section');
+    const navItems = document.querySelectorAll('.nav-link');
 
-        // --- Header Reveal ---
-        gsap.to(".site-header", { y: 0, opacity: 1, duration: 0.8, ease: "expo.out", delay: 0.1 });
-
-        // --- Theme Toggle (persisted) ---
-        const themeToggle = document.getElementById('theme-toggle');
-        const currentTheme = localStorage.getItem('vv-theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-        if (currentTheme === 'light') document.body.classList.add('theme-light');
-        if (themeToggle) {
-            themeToggle.addEventListener('click', () => {
-                document.body.classList.toggle('theme-light');
-                const newTheme = document.body.classList.contains('theme-light') ? 'light' : 'dark';
-                localStorage.setItem('vv-theme', newTheme);
-            });
-        }
-
-        // --- Section (Page) Switching Logic ---
-        const navLinks = document.querySelectorAll('.main-nav .nav-link');
-        const pageSections = document.querySelectorAll('.page-section');
-        const pageContentWrapper = document.getElementById('page-content-wrapper');
-        const siteHeader = document.querySelector('.site-header');
-        let currentHeroAnimation = null;
-        let asciiTerminalAnimationTimeout = null; 
-
-        function showSection(targetId, firstLoad = false) {
-            let sectionToShow = null;
-            pageSections.forEach(section => {
-                if (section.id === targetId) {
-                    sectionToShow = section;
-                } else {
-                    gsap.to(section, { 
-                        opacity: 0, 
-                        duration: 0.3, 
-                        onComplete: () => {
-                            section.classList.remove('active-section');
-                            section.style.display = 'none'; 
-                        }
-                    });
-                }
-            });
-
-            if (sectionToShow) {
-                sectionToShow.style.display = sectionToShow.id === 'hero' ? 'flex' : 'block';
-                sectionToShow.classList.add('active-section'); 
-                
-                gsap.fromTo(sectionToShow, 
-                    { opacity: 0, y: 15 }, 
-                    { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out', delay: firstLoad ? 0.4 : 0.1 }
-                );
-
-                if (!firstLoad && pageContentWrapper && siteHeader) {
-                    const headerHeight = siteHeader.offsetHeight;
-                    let scrollToY = pageContentWrapper.offsetTop - headerHeight;
-                    if (scrollToY < 0) scrollToY = 0; 
-                    window.scrollTo({ top: scrollToY, behavior: 'smooth' });
-                } else if (firstLoad) {
-                     window.scrollTo({ top: 0 }); 
-                }
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            if (scrollY >= (sectionTop - sectionHeight / 3)) {
+                current = section.getAttribute('id');
             }
+        });
 
-            navLinks.forEach(link => {
-                link.classList.toggle('active-nav-link', link.dataset.target === targetId);
-            });
+        navItems.forEach(item => {
+            item.classList.remove('active');
+            if (item.getAttribute('href').includes(current)) {
+                item.classList.add('active');
+            }
+        });
+    });
+
+    // 8. Form Submission (Prevent default for UI purposes)
+    const contactForm = document.getElementById('contact-form');
+    if(contactForm) {
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = contactForm.querySelector('button');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Executing...';
             
-            if (targetId !== 'hero' && currentHeroAnimation) {
-                currentHeroAnimation.kill(); currentHeroAnimation = null;
-            }
-
-            const terminalContainer = document.querySelector('.ascii-terminal-container');
-            const terminalOutput = document.getElementById('ascii-terminal-output');
-            
-            if (asciiTerminalAnimationTimeout) { clearTimeout(asciiTerminalAnimationTimeout); asciiTerminalAnimationTimeout = null; }
-            if (terminalOutput) terminalOutput.textContent = ''; 
-
-            if (targetId === 'hero' && sectionToShow) { 
-                currentHeroAnimation = animateHeroTitle(); 
-                if (terminalContainer && terminalOutput) { initAsciiTerminalAnimation(); }
-            } else {
-                if (terminalContainer) gsap.set(terminalContainer, {opacity:0, y: 15});
-            }
-        }
-        
-        function animateHeroTitle() {
-            const heroTitle = document.querySelector('#hero .hero-title.cyber-reveal-text');
-            const heroSubtitle = document.querySelector('#hero .hero-subtitle');
-            const tlHero = gsap.timeline();
-
-            if (heroTitle && (!heroTitle.classList.contains('animated') || heroTitle.querySelectorAll('.char').length === 0) ) {
-                heroTitle.classList.remove('animated');
-                const originalText = heroTitle.getAttribute('data-original-text') || heroTitle.textContent.trim();
-                heroTitle.setAttribute('data-original-text', originalText);
-
-                if (originalText.length > 0) {
-                    heroTitle.innerHTML = '';
-                    originalText.split('').forEach(char => {
-                        const span = document.createElement('span'); span.className = 'char';
-                        span.textContent = char === ' ' ? '\u00A0' : char; heroTitle.appendChild(span);
-                    });
-                }
-
-                tlHero.fromTo(heroTitle.querySelectorAll('.char'),
-                    { opacity:0, y:30, scale:0.7, filter:'blur(3px)', rotationX:-60 },
-                    { opacity:1, y:0, scale:1, filter:'blur(0px)', rotationX:0, duration:0.8, stagger:0.03, ease:'expo.out', 
-                      onComplete: () => heroTitle.classList.add('animated') 
-                    }, 0.4); 
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fas fa-check"></i> Payload Delivered';
+                btn.classList.replace('btn-primary', 'btn-outline');
+                contactForm.reset();
                 
-                if(heroSubtitle) {
-                    tlHero.fromTo(heroSubtitle, {opacity:0, y:20}, {opacity:1, y:0, duration:0.8, ease:'expo.out'}, 0.9);
-                }
-            } else if (heroTitle && heroSubtitle && heroTitle.classList.contains('animated')) { 
-                gsap.set(heroTitle.querySelectorAll('.char'), {opacity:1, y:0, scale:1, filter:'blur(0px)', rotationX:0});
-                gsap.set(heroSubtitle, {opacity:1, y:0});
-            }
-            return tlHero;
-        }
-
-        // --- Inject skill bars into skill-cards and animate on scroll ---
-        const skillCards = document.querySelectorAll('.skill-card');
-        skillCards.forEach(card => {
-            const level = parseInt(card.dataset.level || '70', 10);
-            const bar = document.createElement('div'); bar.className = 'skill-bar';
-            const fill = document.createElement('div'); fill.className = 'skill-fill';
-            bar.appendChild(fill); card.appendChild(bar);
-            // animate when in view using ScrollTrigger if available
-            if (gsap && gsap.registerPlugin && gsap.utils && gsap.core) {
-                try {
-                    gsap.registerPlugin(ScrollTrigger);
-                } catch (e) { /* already registered */ }
-                gsap.fromTo(fill, { width: '0%' }, {
-                    width: level + '%', duration: 1.2, ease: 'power2.out', scrollTrigger: {
-                        trigger: card, start: 'top 85%', toggleActions: 'play none none reverse'
-                    }
-                });
-            } else {
-                // fallback: simple timeout
-                setTimeout(() => { fill.style.width = level + '%'; }, 700);
-            }
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.classList.replace('btn-outline', 'btn-primary');
+                }, 3000);
+            }, 1500);
         });
-
-        // --- Statistics Counter Animation ---
-        const statNumbers = document.querySelectorAll('.stat-number');
-        let statsAnimated = false;
-        
-        function animateStats() {
-            if (statsAnimated) return;
-            statsAnimated = true;
-            
-            statNumbers.forEach(stat => {
-                const target = parseInt(stat.dataset.target);
-                const duration = 2000; // 2 seconds
-                const increment = target / (duration / 16); // 60fps
-                let current = 0;
-                
-                const updateCounter = () => {
-                    current += increment;
-                    if (current < target) {
-                        stat.textContent = Math.floor(current);
-                        requestAnimationFrame(updateCounter);
-                    } else {
-                        stat.textContent = target;
-                    }
-                };
-                
-                updateCounter();
-            });
-        }
-        
-        // Trigger stats animation when stats section is visible
-        const statsSection = document.getElementById('stats');
-        if (statsSection && gsap && gsap.registerPlugin) {
-            try {
-                gsap.registerPlugin(ScrollTrigger);
-                ScrollTrigger.create({
-                    trigger: statsSection,
-                    start: 'top 80%',
-                    onEnter: animateStats,
-                    once: true
-                });
-            } catch (e) {
-                // Fallback: animate when section becomes active
-                const observer = new MutationObserver((mutations) => {
-                    mutations.forEach((mutation) => {
-                        if (mutation.attributeName === 'class' && 
-                            statsSection.classList.contains('active-section')) {
-                            animateStats();
-                        }
-                    });
-                });
-                observer.observe(statsSection, { attributes: true });
-            }
-        }
-
-
-        function initAsciiTerminalAnimation() {
-            const terminalOutput = document.getElementById('ascii-terminal-output');
-            const terminalContainer = document.querySelector('.ascii-terminal-container');
-        
-            if (!terminalOutput || !terminalContainer) return;
-        
-            if (asciiTerminalAnimationTimeout) { clearTimeout(asciiTerminalAnimationTimeout); asciiTerminalAnimationTimeout = null; }
-            terminalOutput.textContent = ''; 
-        
-            const phrases = [ "> Accessing mainframe...", "> Encrypting funny_cat_videos.zip...", "> Bypassing firewall with 'please!!!'...", "> Found vulnerabilities: 0 (today!)...", "> System status: Mostly harmless.", "> Initiate cat.exe...", "> Reality is a simulation. Secure it." ];
-            let currentPhraseIndex = 0; let charIndex = 0;
-            const typingSpeed = 70; const phraseDelay = 2200; 
-        
-            function typeCharacter() {
-                if (!document.getElementById('hero').classList.contains('active-section') || !terminalOutput) {
-                    if (asciiTerminalAnimationTimeout) clearTimeout(asciiTerminalAnimationTimeout); return; 
-                }
-                if (charIndex < phrases[currentPhraseIndex].length) {
-                    terminalOutput.textContent += phrases[currentPhraseIndex].charAt(charIndex); charIndex++;
-                    asciiTerminalAnimationTimeout = setTimeout(typeCharacter, typingSpeed);
-                } else {
-                    asciiTerminalAnimationTimeout = setTimeout(nextPhraseInTerminal, phraseDelay);
-                }
-            }
-        
-            function nextPhraseInTerminal() {
-                if (!document.getElementById('hero').classList.contains('active-section') || !terminalOutput) {
-                     if (asciiTerminalAnimationTimeout) clearTimeout(asciiTerminalAnimationTimeout); return; 
-                }
-                currentPhraseIndex = (currentPhraseIndex + 1) % phrases.length; charIndex = 0;
-                terminalOutput.textContent = ''; typeCharacter(); 
-            }
-        
-            gsap.to(terminalContainer, {
-                opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', delay: 1.5, 
-                onComplete: () => { if (document.getElementById('hero').classList.contains('active-section')) { typeCharacter(); } }
-            });
-        }
-
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault(); const targetId = e.target.dataset.target; showSection(targetId);
-                if (history.pushState) { history.pushState(null, null, `#${targetId}`); } else { location.hash = `#${targetId}`; }
-            });
-        });
-
-        let initialSectionId = location.hash.substring(1) || 'hero';
-        if (!document.getElementById(initialSectionId)) { initialSectionId = 'hero'; }
-        setTimeout(() => { showSection(initialSectionId, true); }, 50); 
-        
-
-        // --- Plexus Background for Hero ---
-        const heroSectionCanvasEl = document.getElementById('hero');
-        const canvasPlexus = document.getElementById('plexus-canvas');
-        if (canvasPlexus && heroSectionCanvasEl && window.matchMedia('(min-width: 769px)').matches) {
-            const ctx = canvasPlexus.getContext('2d');let particlesArray = [], animationFrameIdPlexus = null;
-            function resizeCanvasPlexus() { if(heroSectionCanvasEl.offsetWidth > 0 && heroSectionCanvasEl.offsetHeight > 0) {canvasPlexus.width = heroSectionCanvasEl.offsetWidth; canvasPlexus.height = heroSectionCanvasEl.offsetHeight;} }
-            class Particle { constructor(x,y,dX,dY,s){this.x=x;this.y=y;this.dX=dX;this.dY=dY;this.s=s;} draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.s,0,Math.PI*2,false);ctx.fillStyle='rgba(0,255,255,0.2)';ctx.fill();} update(){if(this.x>canvasPlexus.width+this.s||this.x<-this.s){this.dX=-this.dX;}if(this.y>canvasPlexus.height+this.s||this.y<-this.s){this.dY=-this.dY;}this.x+=this.dX;this.y+=this.dY;this.draw();}}
-            function initPlexusParticles(){particlesArray=[];if(canvasPlexus.width === 0 || canvasPlexus.height === 0) return; let n=(canvasPlexus.width*canvasPlexus.height)/25000;n=Math.min(n,70);for(let i=0;i<n;i++){let s=(Math.random()*1.2)+0.5,xc=Math.random()*canvasPlexus.width,yc=Math.random()*canvasPlexus.height,dX=(Math.random()*.2)-.1,dY=(Math.random()*.2)-.1;particlesArray.push(new Particle(xc,yc,dX,dY,s));}}
-            function connectPlexusLines(){if(canvasPlexus.width === 0 || canvasPlexus.height === 0) return; for(let a=0;a<particlesArray.length;a++){for(let b=a+1;b<particlesArray.length;b++){let d=Math.sqrt(((particlesArray[a].x-particlesArray[b].x)**2)+((particlesArray[a].y-particlesArray[b].y)**2));const cD=Math.min(canvasPlexus.width/9,110);if(d<cD){const o=1-(d/cD);ctx.strokeStyle=`rgba(0,200,200,${o*.2})`;ctx.lineWidth=.2;ctx.beginPath();ctx.moveTo(particlesArray[a].x,particlesArray[a].y);ctx.lineTo(particlesArray[b].x,particlesArray[b].y);ctx.stroke();}}}}
-            function animatePlexusFrame(){animationFrameIdPlexus=requestAnimationFrame(animatePlexusFrame);if(canvasPlexus.width > 0 && canvasPlexus.height > 0){ctx.clearRect(0,0,canvasPlexus.width,canvasPlexus.height);particlesArray.forEach(p=>p.update());connectPlexusLines();}}
-            function startPlexus() { if (!animationFrameIdPlexus && heroSectionCanvasEl.classList.contains('active-section')) { resizeCanvasPlexus(); initPlexusParticles(); animatePlexusFrame(); } }
-            function stopPlexus() { if (animationFrameIdPlexus) { cancelAnimationFrame(animationFrameIdPlexus); animationFrameIdPlexus = null; } }
-            if (heroSectionCanvasEl.classList.contains('active-section')) { startPlexus(); }
-            window.addEventListener('resize',() => { if(heroSectionCanvasEl.classList.contains('active-section')){ resizeCanvasPlexus(); initPlexusParticles(); }});
-            const heroObserver = new MutationObserver(mutations=>{mutations.forEach(mutation=>{if(mutation.attributeName==='class'){if(heroSectionCanvasEl.classList.contains('active-section')){startPlexus();}else{stopPlexus();}}});});
-            heroObserver.observe(heroSectionCanvasEl, { attributes: true });
-        }
-
-        // --- Contact Form ---
-        const contactForm = document.getElementById('contactForm'); const formStatus = document.getElementById('form-status');
-        if(contactForm && formStatus){contactForm.addEventListener('submit',function(e){e.preventDefault();const d=new FormData(contactForm),b=contactForm.querySelector('button[type="submit"]'),t=b.textContent;b.disabled=true;b.textContent='Transmitting...';formStatus.textContent='';formStatus.className='form-status-message';fetch(contactForm.action,{method:'POST',body:d,headers:{'Accept':'application/json'}}).then(r=>{if(r.ok)return r.json();return r.json().then(j=>{throw new Error(j.errors?j.errors.map(er=>er.message).join(', '):'Network error.');});}).then(j=>{formStatus.textContent="Message sent! I'll be in touch.";formStatus.classList.add('success');contactForm.reset();}).catch(er=>{console.error('Form error:',er);formStatus.textContent="Error: "+(er.message||"Could not send. Try again.");formStatus.classList.add('error');}).finally(()=>{b.disabled=false;b.textContent=t;});});}
-
-        // --- Copyright Year ---
-        const currentYearEl = document.getElementById('current-year'); if(currentYearEl) currentYearEl.textContent = new Date().getFullYear();
-
-        // --- Project modal/lightbox ---
-        // create modal node
-        let projectModal = document.querySelector('.project-modal');
-        if (!projectModal) {
-            projectModal = document.createElement('div'); projectModal.className = 'project-modal';
-            projectModal.innerHTML = '<div class="modal-card"><button class="modal-close">✕</button><div class="modal-body"></div></div>';
-            document.body.appendChild(projectModal);
-        }
-        const modalBody = projectModal.querySelector('.modal-body');
-        const modalCloseBtn = projectModal.querySelector('.modal-close');
-        document.querySelectorAll('.project-card-link-wrapper').forEach((linkWrapper, idx) => {
-            linkWrapper.addEventListener('click', (e) => {
-                e.preventDefault();
-                const card = linkWrapper.closest('.project-card');
-                const img = card.querySelector('img');
-                const title = card.querySelector('h3') ? card.querySelector('h3').textContent : '';
-                const excerpt = card.querySelector('.project-excerpt') ? card.querySelector('.project-excerpt').textContent : '';
-                const tags = Array.from(card.querySelectorAll('.project-tags span')).map(s => s.textContent).join(' • ');
-                modalBody.innerHTML = '<div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;"><div style="flex:1 1 300px;min-width:240px;"><img src="'+(img?img.src:'')+'" alt="'+title+'" style="width:100%;border-radius:6px;display:block;object-fit:cover;" /></div><div style="flex:1 1 320px;min-width:240px;"><h3 style="margin-top:0;color:var(--accent-color);font-family:var(--font-mono);">'+title+'</h3><p style="color:var(--primary-text-color);">'+excerpt+'</p><p style="color:var(--secondary-text-color);"><small>'+tags+'</small></p><p style="margin-top:12px;"><a href="#" style="color:var(--accent-color);text-decoration:none;font-family:var(--font-mono);">View details →</a></p></div></div>';
-                projectModal.classList.add('open');
-            });
-        });
-        if (modalCloseBtn) modalCloseBtn.addEventListener('click', () => projectModal.classList.remove('open'));
-        projectModal.addEventListener('click', (e) => { if (e.target === projectModal) projectModal.classList.remove('open'); });
-
-        // --- Project card tilt on pointer move ---
-        document.querySelectorAll('.project-card').forEach(card => {
-            card.addEventListener('pointermove', e => {
-                const r = card.getBoundingClientRect(); const px = (e.clientX - r.left) / r.width; const py = (e.clientY - r.top) / r.height;
-                const rotateY = (px - 0.5) * 8; const rotateX = (0.5 - py) * 6;
-                card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(6px)`;
-                card.classList.add('tilt');
-            });
-            card.addEventListener('pointerleave', () => { card.style.transform = ''; card.classList.remove('tilt'); });
-        });
-
-        // --- Back to top button ---
-        let backToTop = document.querySelector('.back-to-top');
-        if (!backToTop) { backToTop = document.createElement('button'); backToTop.className = 'back-to-top'; backToTop.textContent = '↑ Top'; document.body.appendChild(backToTop); }
-        window.addEventListener('scroll', () => { if (window.scrollY > 400) backToTop.classList.add('show'); else backToTop.classList.remove('show'); });
-        backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-
-        // --- Matrix / falling binary background ---
-        (function initMatrix() {
-            const canvas = document.getElementById('matrix-canvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            let width = 0, height = 0, columns = [], animationId = null; const symbols = ['0','1','A','B','C','D','E','F'];
-
-            function resize() {
-                width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; const fontSize = Math.max(12, Math.min(20, Math.floor(width / 90)));
-                ctx.font = fontSize + 'px monospace'; const cols = Math.floor(width / (fontSize * 0.6)); columns = new Array(cols).fill(0).map(() => Math.floor(Math.random() * height));
-            }
-
-            function draw() {
-                ctx.fillStyle = 'rgba(0,0,0,0.08)'; ctx.fillRect(0,0,width,height);
-                ctx.fillStyle = 'rgba(0,200,200,0.9)'; ctx.shadowColor = 'rgba(0,200,200,0.6)'; ctx.shadowBlur = 10;
-                for (let i = 0; i < columns.length; i++) {
-                    const x = i * (ctx.measureText('A').width * 0.9);
-                    const y = columns[i] * (parseInt(ctx.font, 10));
-                    const text = Math.random() > 0.15 ? symbols[Math.floor(Math.random() * symbols.length)] : Math.floor(Math.random()*16).toString(16);
-                    ctx.fillText(text, x, y);
-                    if (y > height + 20 || Math.random() > 0.995) columns[i] = 0; else columns[i] += 1;
-                }
-                animationId = requestAnimationFrame(draw);
-            }
-
-            function start() { if (!animationId) { resize(); animationId = requestAnimationFrame(draw); } }
-            function stop() { if (animationId) { cancelAnimationFrame(animationId); animationId = null; } }
-
-            window.addEventListener('resize', () => { stop(); resize(); start(); });
-            document.addEventListener('visibilitychange', () => { if (document.hidden) stop(); else start(); });
-            // always start matrix, but the resize() computes an appropriate fontSize so very small screens are lightweight
-            start();
-        })();
     }
 });
