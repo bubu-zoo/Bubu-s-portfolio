@@ -1,7 +1,6 @@
 // === Portfolio Data ===
 
 const jokes = [
-    "I told my password it had to be eight characters long. It said, “No problem — I’ll be SnowWhite&7Dwarfs.”",
     "Why did the hacker break up with their partner? Too many trust issues and no secure connection.",
     "Cybersecurity is like parenting: You spend all day yelling, “Don’t click that!”",
     "I asked IT if my password was strong enough. They said, “No, but your emotional attachment to it is.”",
@@ -116,6 +115,8 @@ const blogsData = [
         link: "#"
     }
 ];
+
+const contactFormEndpoint = "https://formspree.io/f/xnndrjna";
 
 // === DOM Manipulation & Logic ===
 
@@ -370,7 +371,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 8. Form Submission (Prevent default for UI purposes)
+    // 8. Form Submission (Send to Formspree)
     const contactForm = document.getElementById('contact-form');
     if(contactForm) {
         contactForm.addEventListener('submit', (e) => {
@@ -378,17 +379,42 @@ document.addEventListener('DOMContentLoaded', () => {
             const btn = contactForm.querySelector('button');
             const originalText = btn.innerHTML;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Executing...';
+            btn.disabled = true;
+
+            const formData = new FormData(contactForm);
             
-            setTimeout(() => {
+            fetch(contactFormEndpoint, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(data => {
+                        const errorMessage = data?.errors?.[0]?.message || 'Submission failed. Please try again.';
+                        throw new Error(errorMessage);
+                    });
+                }
+
                 btn.innerHTML = '<i class="fas fa-check"></i> Payload Delivered';
                 btn.classList.replace('btn-primary', 'btn-outline');
                 contactForm.reset();
-                
+
                 setTimeout(() => {
                     btn.innerHTML = originalText;
                     btn.classList.replace('btn-outline', 'btn-primary');
+                    btn.disabled = false;
                 }, 3000);
-            }, 1500);
+            })
+            .catch(() => {
+                btn.innerHTML = '<i class="fas fa-triangle-exclamation"></i> Transmission Failed';
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }, 3000);
+            });
         });
     }
 });
